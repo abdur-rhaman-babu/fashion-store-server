@@ -12,9 +12,7 @@ app.use(express.json());
 
 // const uri =
 //   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.6avkk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-const uri =
-  `mongodb+srv://fashionstore:sgGyhtRruuA5iAjU@cluster0.6avkk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-  
+const uri = `mongodb+srv://fashionstore:sgGyhtRruuA5iAjU@cluster0.6avkk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -27,7 +25,14 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    
+    const fashionCollection = client.db("fashionDB").collection("fashions");
+
+    app.post("/fashions", async (req, res) => {
+        const newFashion = req.body;
+        const result = await fashionCollection.insertOne(newFashion)
+        res.send(result)
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
