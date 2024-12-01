@@ -54,6 +54,23 @@ async function run() {
         res.send(result)
     })
 
+    app.put('/fashions/:id', async (req, res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const options = {upsert: true}
+        const fashion = req.body;
+        const  updatedFashion = {
+            $set:{
+                name: fashion.name,
+                price: fashion.price,
+                details: fashion.details,
+                photo: fashion.photo
+            }
+        }
+        const result = fashionCollection.updateOne(query, updatedFashion, options)
+        res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
