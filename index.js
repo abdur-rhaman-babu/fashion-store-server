@@ -27,11 +27,19 @@ async function run() {
   try {
     const fashionCollection = client.db("fashionDB").collection("fashions");
 
+    // create Fashion
     app.post("/fashions", async (req, res) => {
         const newFashion = req.body;
         const result = await fashionCollection.insertOne(newFashion)
         res.send(result)
     });
+
+    // Read Fashion
+    app.get('/fashions', async (req, res)=>{
+        const cursor = fashionCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
